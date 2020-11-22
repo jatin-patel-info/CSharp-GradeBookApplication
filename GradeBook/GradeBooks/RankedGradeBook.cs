@@ -15,7 +15,7 @@ namespace GradeBook.GradeBooks
         public override char GetLetterGrade(double averageGrade)
         {
             int studentCount = Students.Count;
-            int gradeSection = studentCount/5;
+            int gradeSection = (int)Math.Ceiling(studentCount/5.0);
 
             if(studentCount < 5)
             {
@@ -24,21 +24,18 @@ namespace GradeBook.GradeBooks
             //List<Student> OrderedStudents = new List<Student>();
 
             
-            var orderedStudents = Students.OrderByDescending(s => s.AverageGrade).ToList();
-            var sectionCount = gradeSection;
+            var orderedStudentsGrade = Students.OrderByDescending(s => s.AverageGrade).Select(s=>s.AverageGrade).ToList();
+            var sectionCount = gradeSection; 
 
-            if (averageGrade >= orderedStudents[sectionCount - 1].AverageGrade)
+            if (averageGrade >= orderedStudentsGrade[sectionCount - 1])
                 return 'A';
-            else if (averageGrade >= orderedStudents[sectionCount * 2 - 1].AverageGrade)
+            if (averageGrade >= orderedStudentsGrade[sectionCount * 2 - 1])
                 return 'B';
-            else if (averageGrade >= orderedStudents[sectionCount * 3 - 1].AverageGrade)
+            if (averageGrade >= orderedStudentsGrade[sectionCount * 3 - 1])
                 return 'C';
-            else if (averageGrade >= orderedStudents[sectionCount * 4 - 1].AverageGrade)
+            if (averageGrade >= orderedStudentsGrade[sectionCount * 4 - 1])
                 return 'D';
-            else if (averageGrade >= orderedStudents[sectionCount * 5 - 1].AverageGrade)
-                return 'E';
-            else
-                return 'F';
+            return 'F';
         }
     }
 }
